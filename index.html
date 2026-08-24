@@ -47,6 +47,7 @@
   <div class="tabbar" role="tablist" aria-label="Money tools">
     <button class="tab" data-i="0" role="tab" aria-selected="true">🎯 Budgeting</button>
     <button class="tab" data-i="1" role="tab" aria-selected="false">📈 The Cost of Waiting</button>
+    <button class="tab" data-i="6" role="tab" aria-selected="false">⏳ Start Early</button>
     <button class="tab" data-i="2" role="tab" aria-selected="false">🪙 Buying the Dips</button>
     <button class="tab" data-i="3" role="tab" aria-selected="false">🧭 Start Investing</button>
     <button class="tab" data-i="4" role="tab" aria-selected="false">🔒 Choosing a Tool</button>
@@ -58,10 +59,11 @@
   <iframe id="f3" class="frame" src="investing.html" title="Getting Started with Investing guide" style="display:none"></iframe>
   <iframe id="f4" class="frame" src="choosing.html" title="Choosing a Budgeting Tool guide" style="display:none"></iframe>
   <iframe id="f5" class="frame" src="setup.html" title="Budget sheet and form setup guide" style="display:none"></iframe>
+  <iframe id="f6" class="frame" src="startearly.html" title="The Price of Waiting — start early tool" style="display:none"></iframe>
 
 <script>
 (function(){
-  var frames=[document.getElementById('f0'),document.getElementById('f1'),document.getElementById('f2'),document.getElementById('f3'),document.getElementById('f4'),document.getElementById('f5')];
+  var frames=[document.getElementById('f0'),document.getElementById('f1'),document.getElementById('f2'),document.getElementById('f3'),document.getElementById('f4'),document.getElementById('f5'),document.getElementById('f6')];
   var mqPresent=window.matchMedia('(min-width:920px) and (min-aspect-ratio:13/10)');
   function present(){return mqPresent.matches;}
   function fit(f){

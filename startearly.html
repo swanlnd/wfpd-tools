@@ -1,0 +1,209 @@
+<title>The Price of Waiting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#f4f2ea; --card:#fbfaf5; --ink:#16241e; --muted:#586a60; --faint:#7d8c82;
+    --line:#dcdacc; --line-strong:#c9c6b4; --forest:#1f4a3d; --forest-2:#2f6f5e;
+    --brass:#9c701f; --brass-soft:#ecdfc2;
+    --c1:#1f7a5e; --c2:#5a8f3e; --c3:#b0812f; --c4:#c0662a; --c5:#b5462f;
+    --track:#e7e4d6;
+    --shadow:0 1px 0 rgba(22,36,30,.04), 0 12px 30px -22px rgba(22,36,30,.5);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --c1:#4fbf95; --c2:#8fbf5e; --c3:#dcb166; --c4:#e0925a; --c5:#e58b73;
+    --track:#26332c;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --c1:#4fbf95; --c2:#8fbf5e; --c3:#dcb166; --c4:#e0925a; --c5:#e58b73;
+    --track:#26332c;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px 56px;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  header.top{background:var(--forest);color:#f4f2ea;border-radius:0 0 6px 6px;padding:32px 36px 28px;margin-bottom:22px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft);margin-bottom:12px;}
+  header.top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(2rem,5vw,2.9rem);line-height:1.03;margin:0 0 8px;letter-spacing:-.01em;}
+  header.top p{margin:0;color:rgba(244,242,234,.85);max-width:60ch;font-size:1rem;}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .inputs{display:flex;flex-wrap:wrap;gap:18px 26px;align-items:flex-end;}
+  .fld{display:block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:7px;}
+  .box{display:flex;align-items:center;gap:8px;border:1px solid var(--line-strong);background:var(--paper);border-radius:8px;padding:6px 12px;}
+  .box>span{font-family:"IBM Plex Mono",monospace;color:var(--forest-2);font-weight:600;font-size:.85rem;}
+  .box input{border:0;background:transparent;color:var(--ink);font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1.15rem;outline:none;text-align:right;}
+  .box input::-webkit-outer-spin-button,.box input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .box input{-moz-appearance:textfield;}
+  #target{width:120px;} #goal{width:44px;} #rate{width:44px;} #income{width:90px;} #wr{width:44px;}
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;}
+  .seg button{border:0;background:transparent;color:var(--muted);padding:9px 16px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
+  .seg button[aria-pressed="true"]{background:var(--forest);color:#f4f2ea;}
+  .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+  .incgrp{display:flex;gap:18px 26px;}
+  .targetline{margin-top:14px;font-size:.9rem;color:var(--muted);}
+  .targetline b{color:var(--brass);font-family:"IBM Plex Mono",monospace;}
+
+  .headline{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(1.1rem,2.6vw,1.5rem);line-height:1.25;margin:2px 2px 20px;text-wrap:balance;}
+  .headline b{color:var(--brass);}
+  .headline .lo{color:var(--c1);}
+
+  .rows{display:flex;flex-direction:column;gap:12px;}
+  .row{display:grid;grid-template-columns:118px 1fr auto;gap:14px;align-items:center;}
+  .row .age{font-weight:600;font-size:1rem;}
+  .row .age small{display:block;color:var(--faint);font-weight:400;font-size:.78rem;font-family:"IBM Plex Mono",monospace;}
+  .bar-track{background:var(--track);border-radius:7px;height:34px;overflow:hidden;}
+  .bar{height:100%;border-radius:7px;transition:width .5s cubic-bezier(.2,.7,.2,1);min-width:3px;}
+  .row .amt{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1.05rem;text-align:right;white-space:nowrap;min-width:120px;}
+  .row .amt small{display:block;color:var(--faint);font-weight:400;font-size:.72rem;}
+
+  .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:24px;padding-top:16px;border-top:1px solid var(--line);}
+  .note b{color:var(--muted);}
+  .credit{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:16px;}
+  .foot{margin-top:8px;}
+
+  @media (max-width:560px){
+    header.top{padding:26px 22px;}
+    .row{grid-template-columns:92px 1fr;grid-template-areas:"age bar" "amt amt";}
+    .row .age{grid-area:age;} .row .bar-track{grid-area:bar;} .row .amt{grid-area:amt;text-align:left;margin-top:2px;}
+  }
+  /* landscape / present */
+  @media (min-width:920px) and (min-aspect-ratio:13/10){
+    .wrap{max-width:1000px;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:20px 22px;}
+    header.top{margin:0 0 16px;padding:20px 30px;}
+    header.top h1{font-size:2rem;}
+    .bar-track{height:40px;}
+    .row .amt{font-size:1.15rem;}
+  }
+  @media print{ body{background:#fff;} .panel{box-shadow:none;} header.top{border-radius:0;} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">World Financial Planning Day · SWAN L&amp;D &amp; Finance</div>
+    <h1>The Price of Waiting</h1>
+    <p>The same finish line costs far less each month when you start younger — because time, not the amount, does the heavy lifting. Here's what reaching your target by retirement costs, depending on the age you begin.</p>
+  </header>
+
+  <div class="panel">
+    <div class="seg" role="group" aria-label="Target mode">
+      <button id="mAmount" aria-pressed="true">Target amount</button>
+      <button id="mIncome" aria-pressed="false">From passive income</button>
+    </div>
+    <div class="inputs" style="margin-top:16px;">
+      <div id="grpAmount">
+        <label class="fld" for="target">Target amount</label>
+        <div class="box"><span>QAR</span><input id="target" type="text" inputmode="numeric" value="1,000,000" aria-label="Target amount"></div>
+      </div>
+      <div id="grpIncome" class="incgrp" style="display:none;">
+        <div>
+          <label class="fld" for="income">Passive income / month</label>
+          <div class="box"><span>QAR</span><input id="income" type="text" inputmode="numeric" value="5,000" aria-label="Desired passive monthly income"></div>
+        </div>
+        <div>
+          <label class="fld" for="wr">Safe withdrawal</label>
+          <div class="box"><input id="wr" type="number" min="1" max="10" step="0.5" value="4" aria-label="Safe withdrawal rate"><span>%</span></div>
+        </div>
+      </div>
+      <div>
+        <label class="fld" for="goal">By age</label>
+        <div class="box"><input id="goal" type="number" min="30" max="80" step="1" value="65" aria-label="Retirement age"></div>
+      </div>
+      <div>
+        <label class="fld" for="rate">Yearly growth</label>
+        <div class="box"><input id="rate" type="number" min="0" max="20" step="0.5" value="7" aria-label="Growth rate"><span>%</span></div>
+      </div>
+    </div>
+    <div class="targetline" id="targetLine" style="display:none;">→ That means a target of about <b id="tlAmt">—</b> invested.</div>
+  </div>
+
+  <p class="headline" id="headline">—</p>
+
+  <div class="rows" id="rows"></div>
+
+  <p class="note">
+    <b>How to read it:</b> each bar is the fixed amount you'd set aside <em>every month</em> to reach your target by your chosen age, if it grew at the rate shown. Start younger and the bar shrinks dramatically — that's compounding rewarding time in the market. <br><br>
+    <b>About the rate:</b> a diversified stock ETF has historically returned roughly <b>7% a year</b> over the long run (before inflation) — that's the default here. More cautious planning uses ~5%, and cash or fixed deposits far less. Change it to see how sensitive the numbers are.<br><br>
+    This is a simplified illustration assuming a steady return compounded monthly; real markets rise and fall and nothing here is guaranteed. Amounts in QAR. Educational only, not financial advice.
+  </p>
+  <div class="credit foot">Created by SWAN L&amp;D · 2026</div>
+</div>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var START_AGES=[20,30,40,50,60];
+  var COLORS=["--c1","--c2","--c3","--c4","--c5"];
+  var S={mode:"amount", target:1000000, income:5000, wr:4, goal:65, rate:7};
+
+  function fmt(n){return Math.round(n).toLocaleString("en-US")}
+  function pmt(fv,rateAnnual,months){
+    if(months<=0) return Infinity;
+    var i=rateAnnual/100/12;
+    if(i===0) return fv/months;
+    return fv*i/(Math.pow(1+i,months)-1);
+  }
+  function effTarget(){ return S.mode==="amount" ? S.target : (S.wr>0 ? S.income*12/(S.wr/100) : 0); }
+
+  function render(){
+    var TG=effTarget();
+    if(S.mode==="income") $("tlAmt").textContent="QAR "+fmt(TG);
+    var rows=$("rows"); rows.innerHTML="";
+    var ages=START_AGES.filter(function(a){return a < S.goal;});
+    var data=ages.map(function(a,idx){
+      var yrs=S.goal-a;
+      var m=pmt(TG, S.rate, yrs*12);
+      return {age:a, yrs:yrs, monthly:m, color:COLORS[Math.min(idx,COLORS.length-1)]};
+    });
+    var maxM=Math.max.apply(null, data.map(function(d){return d.monthly}));
+    data.forEach(function(d){
+      var w=maxM>0 ? Math.max(3, d.monthly/maxM*100) : 3;
+      var div=document.createElement("div");
+      div.className="row";
+      div.innerHTML=
+        '<div class="age">Start at '+d.age+'<small>'+d.yrs+' years to go</small></div>'
+        +'<div class="bar-track"><div class="bar" style="width:'+w+'%;background:var('+d.color+')"></div></div>'
+        +'<div class="amt">QAR '+fmt(d.monthly)+'<small>per month</small></div>';
+      rows.appendChild(div);
+    });
+    // headline: youngest vs oldest
+    if(data.length>=2){
+      var lo=data[0], hi=data[data.length-1];
+      var mult=lo.monthly>0 ? Math.round(hi.monthly/lo.monthly) : 0;
+      $("headline").innerHTML='Waiting from <b>'+lo.age+'</b> to <b>'+hi.age+'</b> makes the same goal about <b>'+mult+'× more expensive</b> every month — <span class="lo">QAR '+fmt(lo.monthly)+'</span> vs <b>QAR '+fmt(hi.monthly)+'</b>.';
+    } else { $("headline").textContent=""; }
+  }
+
+  $("target").addEventListener("input",function(){
+    var raw=(""+this.value).replace(/[^0-9.]/g,""); var n=raw?Math.round(parseFloat(raw)):0;
+    S.target=n; this.value=n?n.toLocaleString("en-US"):""; render();
+  });
+  $("goal").addEventListener("input",function(){var v=parseInt(this.value,10);if(isNaN(v))v=65;v=Math.max(25,Math.min(85,v));S.goal=v;render();});
+  $("rate").addEventListener("input",function(){var v=parseFloat(this.value);if(isNaN(v))v=0;v=Math.max(0,Math.min(20,v));S.rate=v;render();});
+  $("income").addEventListener("input",function(){var raw=(""+this.value).replace(/[^0-9.]/g,"");var n=raw?Math.round(parseFloat(raw)):0;S.income=n;this.value=n?n.toLocaleString("en-US"):"";render();});
+  $("wr").addEventListener("input",function(){var v=parseFloat(this.value);if(isNaN(v))v=4;v=Math.max(0.5,Math.min(20,v));S.wr=v;render();});
+  function setMode(m){
+    S.mode=m;
+    $("mAmount").setAttribute("aria-pressed", m==="amount");
+    $("mIncome").setAttribute("aria-pressed", m==="income");
+    $("grpAmount").style.display = m==="amount" ? "" : "none";
+    $("grpIncome").style.display = m==="income" ? "flex" : "none";
+    $("targetLine").style.display = m==="income" ? "" : "none";
+    render();
+  }
+  $("mAmount").addEventListener("click",function(){setMode("amount")});
+  $("mIncome").addEventListener("click",function(){setMode("income")});
+
+  render();
+})();
+</script>
