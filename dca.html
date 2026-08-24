@@ -1,0 +1,317 @@
+<title>Buying the Dips</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#f4f2ea; --card:#fbfaf5; --ink:#16241e; --muted:#586a60; --faint:#7d8c82;
+    --line:#dcdacc; --line-strong:#c9c6b4; --forest:#1f4a3d; --forest-2:#2f6f5e;
+    --brass:#9c701f; --brass-soft:#ecdfc2;
+    --price:#2e6fb8; --buy:#9c701f; --avgcost:#0d8f74; --good:#2f7d54; --bad:#b5462f;
+    --grid:#e7e4d6; --track:#e7e4d6; --thumb:#1f4a3d;
+    --shadow:0 1px 0 rgba(22,36,30,.04), 0 14px 32px -24px rgba(22,36,30,.55);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --price:#4f93d6; --buy:#dcb166; --avgcost:#1f9c78; --good:#6fce9c; --bad:#e58b73;
+    --grid:#26332c; --track:#26332c; --thumb:#8fc9b3;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 16px 36px -24px rgba(0,0,0,.8);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --price:#4f93d6; --buy:#dcb166; --avgcost:#1f9c78; --good:#6fce9c; --bad:#e58b73;
+    --grid:#26332c; --track:#26332c; --thumb:#8fc9b3;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 16px 36px -24px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 60px;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  header.top{background:var(--forest);color:#f4f2ea;border-radius:0 0 6px 6px;padding:30px 34px;margin-bottom:24px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft);margin-bottom:12px;}
+  header.top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(1.9rem,4.4vw,2.7rem);line-height:1.05;margin:0 0 8px;letter-spacing:-.01em;}
+  header.top p{margin:0;color:rgba(244,242,234,.82);max-width:60ch;font-size:.98rem;}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .fld{display:block;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+
+  .scenarios{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+  .scenarios button{border:1px solid var(--line-strong);background:var(--paper);color:var(--muted);border-radius:100px;padding:8px 15px;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;}
+  .scenarios button[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:#f4f2ea;}
+  .scenarios button:focus-visible{outline:2px solid var(--brass);outline-offset:2px;}
+
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:18px 34px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line);}
+  .ctrl label{display:flex;justify-content:space-between;align-items:baseline;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px;}
+  .ctrl label b{font-family:"IBM Plex Sans",sans-serif;font-size:1.05rem;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:600;}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:var(--track);outline:none;cursor:pointer;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:17px;height:17px;border-radius:50%;background:var(--thumb);border:2px solid var(--card);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+  input[type=range]::-moz-range-thumb{width:17px;height:17px;border-radius:50%;background:var(--thumb);border:2px solid var(--card);}
+
+  .chartbox{position:relative;}
+  svg.chart{width:100%;height:auto;display:block;}
+  .legend{display:flex;gap:15px;flex-wrap:wrap;margin:2px 0 12px;font-size:.84rem;}
+  .legend .it{display:flex;align-items:center;gap:7px;color:var(--muted);}
+  .legend .ln{width:20px;height:0;border-top-width:3px;border-top-style:solid;}
+  .legend .dot{border-radius:50%;}
+  .tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line-strong);border-radius:8px;padding:9px 11px;font-size:.78rem;box-shadow:var(--shadow);opacity:0;transition:opacity .12s;min-width:168px;z-index:3;}
+  .tip .yr{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+  .tip .r{display:flex;justify-content:space-between;gap:14px;line-height:1.7;}
+  .tip .r span:first-child{color:var(--muted);}
+  .tip .r b{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;}
+
+  .stats{display:flex;flex-wrap:wrap;gap:14px;}
+  .stat{flex:1;min-width:150px;border:1px solid var(--line);border-radius:9px;padding:15px 17px;background:var(--card);box-shadow:var(--shadow);}
+  .stat .k{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+  .stat .v{font-size:1.35rem;font-weight:600;line-height:1.1;}
+  .stat .sub{font-size:.75rem;color:var(--muted);margin-top:5px;}
+
+  .callout{margin-top:16px;border:1px solid var(--avgcost);border-left:4px solid var(--avgcost);border-radius:9px;padding:16px 20px;background:var(--card);box-shadow:var(--shadow);}
+  .callout .big{font-size:1.2rem;font-weight:600;}
+  .callout .big b{color:var(--avgcost);}
+  .callout .big .price{color:var(--faint);}
+  .callout p{margin:5px 0 0;font-size:.84rem;color:var(--muted);}
+
+  .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
+  .note b{color:var(--muted);}
+  @media (max-width:600px){ header.top{padding:24px 20px;} .controls{grid-template-columns:1fr;} }
+
+  /* ---- Landscape / present-on-screen layout ---- */
+  @media (min-width:920px) and (min-aspect-ratio:13/10){
+    html,body{overflow:hidden;}
+    .wrap{max-width:none;height:100vh;display:flex;flex-direction:column;padding:0 22px 10px;gap:10px;}
+    header.top{margin:0;padding:13px 26px;flex:none;}
+    header.top h1{font-size:1.5rem;margin-bottom:2px;}
+    header.top p{font-size:.8rem;max-width:120ch;}
+    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(300px,34%) 1fr;gap:16px;align-items:start;}
+    .lscol{display:flex;flex-direction:column;gap:10px;min-width:0;}
+    .lscol .panel{margin:0;}
+    .panel{padding:15px 18px;}
+    .controls{margin-top:14px;padding-top:12px;}
+    .legend{margin-bottom:8px;}
+    .stats{gap:10px;}
+    .stat{min-width:110px;padding:10px 12px;}
+    .stat .v{font-size:1.1rem;}
+    .stat .sub{display:none;}
+    .callout{margin-top:0;padding:11px 16px;}
+    .callout p{display:none;}
+    .note{display:none;}
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">World Financial Planning Day · SWAN L&amp;D &amp; Finance</div>
+    <h1>Buying the Dips, Automatically</h1>
+    <p>Invest the same amount every month and something clever happens by itself: your money buys <em>more</em> units when the price is low and fewer when it's high — so you never have to guess the bottom. This is "dollar-cost averaging."</p>
+  </header>
+
+  <div class="lsgrid">
+  <div class="lscol lscol-a">
+  <div class="panel">
+    <span class="fld">Pick a market story — what happens to the price over time</span>
+    <div class="scenarios" role="group" aria-label="Price scenario">
+      <button data-s="dip" aria-pressed="true">Dip &amp; recover</button>
+      <button data-s="crash" aria-pressed="false">Crash &amp; rebound</button>
+      <button data-s="choppy" aria-pressed="false">Choppy sideways</button>
+      <button data-s="climb" aria-pressed="false">Steady climb</button>
+      <button data-s="decline" aria-pressed="false">Long decline</button>
+      <button data-s="random" aria-pressed="false">🎲 Surprise me</button>
+    </div>
+    <div class="controls">
+      <div class="ctrl">
+        <label for="amt">Invested every month <b id="amtV">QAR 1,000</b></label>
+        <input id="amt" type="range" min="100" max="5000" step="100" value="1000">
+      </div>
+      <div class="ctrl">
+        <label for="months">Months of investing <b id="monthsV">24</b></label>
+        <input id="months" type="range" min="6" max="48" step="1" value="24">
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="lscol lscol-b">
+  <div class="panel chartpanel">
+    <div class="legend">
+      <span class="it"><span class="ln" style="border-color:var(--price)"></span>Unit price</span>
+      <span class="it"><span class="dot" style="width:13px;height:13px;background:var(--buy);opacity:.85"></span>Your monthly buy <span style="color:var(--faint)">(bigger = more units)</span></span>
+      <span class="it"><span class="ln" style="border-color:var(--avgcost)"></span>Your average cost</span>
+      <span class="it"><span class="ln" style="border-color:var(--faint);border-top-style:dashed"></span>Average price</span>
+    </div>
+    <div class="chartbox">
+      <svg id="chart" class="chart" viewBox="0 0 760 380" role="img" aria-label="Unit price over time with monthly purchases sized by units bought, plus average cost versus average price">
+        <g id="grid"></g>
+        <line id="lnAvgPrice" stroke="var(--faint)" stroke-width="1.5" stroke-dasharray="5 4"></line>
+        <line id="lnAvgCost" stroke="var(--avgcost)" stroke-width="2"></line>
+        <path id="priceLine" fill="none" stroke="var(--price)" stroke-width="2" stroke-linejoin="round"></path>
+        <g id="buys"></g>
+        <g id="labels"></g>
+        <line id="cross" stroke="var(--line-strong)" stroke-width="1" stroke-dasharray="3 3" style="display:none"></line>
+        <g id="xlabels"></g>
+      </svg>
+      <div class="tip" id="tip"></div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="k">You invested</div><div class="v mono" id="invested">—</div><div class="sub" id="investedSub">—</div></div>
+    <div class="stat"><div class="k">Units you own</div><div class="v mono" id="units">—</div><div class="sub">More units, because dips were cheap.</div></div>
+    <div class="stat"><div class="k">Worth today</div><div class="v mono" id="value">—</div><div class="sub" id="valueSub">Units × the final price.</div></div>
+    <div class="stat" id="glTile"><div class="k">Gain / loss</div><div class="v mono" id="gl">—</div><div class="sub">Value minus what you put in.</div></div>
+  </div>
+
+  <div class="callout">
+    <div class="big">Your average cost: <b id="coCost">—</b> <span class="price">vs average price <span id="coPrice">—</span></span></div>
+    <p id="coP">Because your fixed amount bought more units when the price was low, you paid less per unit than the market's average — without ever trying to time it.</p>
+  </div>
+  </div>
+  </div>
+
+  <p class="note">
+    <b>The takeaway:</b> steady monthly investing turns a bumpy market into an advantage — the dips become discounts, and you're never forced to guess the perfect moment. That's the same thing that happens when you invest into an ETF from your salary each month.<br><br>
+    <b>But it's not magic:</b> dollar-cost averaging lowers your <em>average cost</em> and removes the guesswork — it does not guarantee a profit. If the price ends below what you paid (try "Long decline"), you can still be down. Prices here are simplified illustrations, not real market data or a forecast. Educational only, not financial advice.
+  </p>
+</div>
+
+<script>
+(function(){
+  var VBW=760, VBH=380, PADL=52, PADR=60, PADT=22, PADB=34;
+  var plotW=VBW-PADL-PADR, plotH=VBH-PADT-PADB;
+  var $=function(i){return document.getElementById(i)};
+  var S={amt:1000, months:24, scen:"dip"};
+  var D=null, randomSeed=[];
+
+  function fmt(n){return Math.round(n).toLocaleString("en-US")}
+  function fmt2(n){return n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}
+  function money(n){return "QAR "+fmt(n)}
+
+  function priceAt(scen,p){ // p in [0,1] -> price around 100
+    switch(scen){
+      case "dip":     return 100 - 44*Math.sin(Math.PI*p) + 12*p;
+      case "crash":   return 100 - 58*Math.sin(Math.PI*Math.pow(p,0.62)) + 30*p;
+      case "choppy":  return 100 + 20*Math.sin(2*Math.PI*1.6*p) - 6*Math.sin(2*Math.PI*0.5*p);
+      case "climb":   return 100 + 62*p + 9*Math.sin(2*Math.PI*2*p);
+      case "decline": return 100 - 40*p + 11*Math.sin(2*Math.PI*2.2*p);
+      default:        return 100;
+    }
+  }
+  function buildPrices(){
+    var M=S.months, arr=[];
+    if(S.scen==="random"){
+      if(randomSeed.length!==M){
+        randomSeed=[]; var v=100;
+        for(var k=0;k<M;k++){ v=v*(1+(Math.random()-0.48)*0.16); v=Math.max(35,Math.min(200,v)); randomSeed.push(v); }
+      }
+      arr=randomSeed.slice();
+    } else {
+      for(var i=0;i<M;i++){ var p=M>1?i/(M-1):0; arr.push(Math.max(20,priceAt(S.scen,p))); }
+    }
+    return arr;
+  }
+
+  function build(){
+    var prices=buildPrices(), M=prices.length;
+    var unitsMonth=prices.map(function(pr){return S.amt/pr});
+    var totUnits=unitsMonth.reduce(function(a,b){return a+b},0);
+    var totInv=S.amt*M;
+    var avgCost=totInv/totUnits;
+    var avgPrice=prices.reduce(function(a,b){return a+b},0)/M;
+    var valueNow=totUnits*prices[M-1];
+    var lo=Math.min.apply(null,prices.concat([avgCost,avgPrice]));
+    var hi=Math.max.apply(null,prices.concat([avgCost,avgPrice]));
+    var pad=(hi-lo)*0.12||1;
+    D={prices:prices,M:M,unitsMonth:unitsMonth,totUnits:totUnits,totInv:totInv,avgCost:avgCost,avgPrice:avgPrice,
+       valueNow:valueNow,gain:valueNow-totInv,yMin:lo-pad,yMax:hi+pad,maxUnits:Math.max.apply(null,unitsMonth)};
+    draw(); stats();
+  }
+
+  function X(i){return PADL + plotW*(D.M>1? i/(D.M-1):0);}
+  function Yc(v){return PADT + plotH*(1-(v-D.yMin)/(D.yMax-D.yMin));}
+
+  function draw(){
+    var g=$("grid"); g.innerHTML=""; var steps=4;
+    for(var s=0;s<=steps;s++){
+      var v=D.yMin+(D.yMax-D.yMin)*s/steps, y=Yc(v);
+      g.innerHTML+='<line x1="'+PADL+'" y1="'+y+'" x2="'+(VBW-PADR)+'" y2="'+y+'" stroke="var(--grid)" stroke-width="1"/>';
+      g.innerHTML+='<text x="'+(PADL-9)+'" y="'+(y+4)+'" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--faint)">'+Math.round(v)+'</text>';
+    }
+    var xl=$("xlabels"); xl.innerHTML=""; var te=D.M>24?12:(D.M>12?6:3);
+    for(var m=0;m<D.M;m+=te){
+      xl.innerHTML+='<text x="'+X(m)+'" y="'+(VBH-11)+'" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="var(--faint)">'+(m+1)+'</text>';
+    }
+    $("priceLine").setAttribute("d","M"+D.prices.map(function(v,i){return X(i)+","+Yc(v)}).join(" L"));
+    // avg lines
+    var yc=Yc(D.avgCost), yp=Yc(D.avgPrice);
+    setLine("lnAvgCost",PADL,yc,VBW-PADR,yc); setLine("lnAvgPrice",PADL,yp,VBW-PADR,yp);
+    var lb=$("labels"); lb.innerHTML="";
+    lb.innerHTML+=tag(VBW-PADR+4,yc,"var(--avgcost)","avg cost "+Math.round(D.avgCost));
+    lb.innerHTML+=tag(VBW-PADR+4,yp,"var(--faint)","avg price "+Math.round(D.avgPrice));
+    // buy dots
+    var b=$("buys"); b.innerHTML="";
+    D.prices.forEach(function(v,i){
+      var r=4+8*(D.unitsMonth[i]/D.maxUnits);
+      b.innerHTML+='<circle cx="'+X(i)+'" cy="'+Yc(v)+'" r="'+r.toFixed(1)+'" fill="var(--buy)" opacity="0.8" stroke="var(--card)" stroke-width="1"/>';
+    });
+  }
+  function setLine(id,x1,y1,x2,y2){var l=$(id);l.setAttribute("x1",x1);l.setAttribute("y1",y1);l.setAttribute("x2",x2);l.setAttribute("y2",y2);}
+  function tag(x,y,color,txt){
+    return '<text x="'+x+'" y="'+(y+3.5)+'" font-family="IBM Plex Mono,monospace" font-size="10.5" font-weight="600" fill="'+color+'">'+txt+'</text>';
+  }
+
+  function stats(){
+    $("invested").textContent=money(D.totInv);
+    $("investedSub").textContent=money(S.amt)+" × "+D.M+" months.";
+    $("units").textContent=fmt2(D.totUnits);
+    $("value").textContent=money(D.valueNow);
+    $("valueSub").textContent="Final price "+money(D.prices[D.M-1])+"/unit.";
+    var gl=$("gl"), pct=D.totInv>0?(D.gain/D.totInv*100):0;
+    gl.textContent=(D.gain>=0?"+":"−")+"QAR "+fmt(Math.abs(D.gain));
+    gl.style.color=D.gain>=0?"var(--good)":"var(--bad)";
+    $("glTile").style.borderLeft="3px solid "+(D.gain>=0?"var(--good)":"var(--bad)");
+    $("coCost").textContent="QAR "+fmt2(D.avgCost);
+    $("coPrice").textContent="QAR "+fmt2(D.avgPrice);
+  }
+
+  // hover
+  var svg=$("chart"), tip=$("tip");
+  function move(e){
+    var rect=svg.getBoundingClientRect();
+    var cx=(e.touches?e.touches[0].clientX:e.clientX);
+    var vbX=(cx-rect.left)/(rect.width/VBW);
+    var i=Math.round((vbX-PADL)/plotW*(D.M-1)); if(i<0)i=0; if(i>D.M-1)i=D.M-1;
+    var xx=X(i);
+    $("cross").style.display=""; $("cross").setAttribute("x1",xx);$("cross").setAttribute("x2",xx);
+    $("cross").setAttribute("y1",PADT);$("cross").setAttribute("y2",PADT+plotH);
+    tip.style.opacity="1";
+    tip.innerHTML='<div class="yr">Month '+(i+1)+'</div>'
+      +'<div class="r"><span>Unit price</span><b>QAR '+fmt2(D.prices[i])+'</b></div>'
+      +'<div class="r"><span>Units bought</span><b>'+fmt2(D.unitsMonth[i])+'</b></div>'
+      +'<div class="r"><span>Invested so far</span><b>QAR '+fmt(S.amt*(i+1))+'</b></div>';
+    var px=(xx/VBW)*rect.width, tw=tip.offsetWidth;
+    tip.style.left=Math.min(Math.max(px-tw/2,0),rect.width-tw)+"px"; tip.style.top="6px";
+  }
+  function leave(){tip.style.opacity="0";$("cross").style.display="none";}
+  svg.addEventListener("mousemove",move); svg.addEventListener("mouseleave",leave);
+  svg.addEventListener("touchmove",function(e){move(e);e.preventDefault();},{passive:false});
+
+  // controls
+  $("amt").addEventListener("input",function(){S.amt=+this.value;$("amtV").textContent=money(S.amt);build();});
+  $("months").addEventListener("input",function(){S.months=+this.value;$("monthsV").textContent=S.months;randomSeed=[];build();});
+  document.querySelectorAll('.scenarios button').forEach(function(btn){
+    btn.addEventListener("click",function(){
+      S.scen=this.dataset.s;
+      if(S.scen==="random") randomSeed=[];
+      document.querySelectorAll('.scenarios button').forEach(function(b){b.setAttribute("aria-pressed", b===btn);});
+      build();
+    });
+  });
+
+  build();
+})();
+</script>

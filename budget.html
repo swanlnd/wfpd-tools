@@ -1,0 +1,319 @@
+<title>Money on Purpose</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#f4f2ea; --card:#fbfaf5; --ink:#16241e; --muted:#586a60; --faint:#7d8c82;
+    --line:#dcdacc; --line-strong:#c9c6b4; --forest:#1f4a3d; --forest-2:#2f6f5e;
+    --brass:#9c701f; --brass-soft:#ecdfc2;
+    --good:#2f7d54; --bad:#b5462f;
+    --b1:#1f4a3d; --b2:#0d8f74; --b3:#5cb39a; --b4:#b0812f; --b5:#d0a24f; --b6:#e0c489; --b7:#3f7d8c; --b8:#9aa39a;
+    --track:#e7e4d6; --thumb:#1f4a3d;
+    --shadow:0 1px 0 rgba(22,36,30,.04), 0 14px 32px -24px rgba(22,36,30,.55);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#7d8f85;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120; --good:#6fce9c; --bad:#e58b73;
+    --b1:#5fae95; --b2:#3fbf9c; --b3:#79cbb4; --b4:#d6a24a; --b5:#e3bd74; --b6:#eed4a0; --b7:#77b3c2; --b8:#b6bdb4;
+    --track:#26332c; --thumb:#8fc9b3;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 16px 36px -24px rgba(0,0,0,.8);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#7d8f85;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120; --good:#6fce9c; --bad:#e58b73;
+    --b1:#5fae95; --b2:#3fbf9c; --b3:#79cbb4; --b4:#d6a24a; --b5:#e3bd74; --b6:#eed4a0; --b7:#77b3c2; --b8:#b6bdb4;
+    --track:#26332c; --thumb:#8fc9b3;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 16px 36px -24px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:840px;margin:0 auto;padding:0 20px 60px;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+  header.top{background:var(--forest);color:#f4f2ea;border-radius:0 0 6px 6px;padding:30px 34px;margin-bottom:26px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft);margin-bottom:12px;}
+  header.top h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(1.9rem,4.4vw,2.7rem);line-height:1.05;margin:0 0 8px;letter-spacing:-.01em;}
+  header.top p{margin:0;color:rgba(244,242,234,.82);max-width:54ch;font-size:.98rem;}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:20px;}
+  .row1{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-end;justify-content:space-between;}
+  label.fld{display:block;font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px;}
+  .salary-in{display:flex;align-items:center;gap:10px;border:1px solid var(--line-strong);background:var(--paper);border-radius:8px;padding:6px 12px;}
+  .salary-in .cur{font-weight:600;color:var(--forest-2);font-family:"IBM Plex Mono",monospace;}
+  .salary-in input{border:0;background:transparent;color:var(--ink);font-size:1.5rem;font-weight:600;width:170px;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;outline:none;}
+  select,.seg button{font-family:"IBM Plex Sans",sans-serif;}
+  select{border:1px solid var(--line-strong);background:var(--paper);color:var(--ink);border-radius:8px;padding:9px 12px;font-size:.9rem;cursor:pointer;}
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:8px;overflow:hidden;}
+  .seg button{border:0;background:transparent;color:var(--muted);padding:9px 15px;font-size:.85rem;font-weight:600;cursor:pointer;transition:.15s;}
+  .seg button[aria-pressed="true"]{background:var(--forest);color:#f4f2ea;}
+
+  .barwrap{margin:22px 0 6px;}
+  .stackbar{display:flex;width:100%;height:34px;border-radius:7px;overflow:hidden;gap:2px;background:var(--track);}
+  .stackbar span{flex:0 0 auto;transition:flex-basis .28s ease, background .2s;min-width:2px;}
+  .barcap{display:flex;justify-content:space-between;font-size:.78rem;color:var(--faint);margin-top:8px;}
+
+  table.buckets{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;}
+  .buckets th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:500;padding:0 8px 10px;}
+  .buckets th.r,.buckets td.r{text-align:right;}
+  .buckets th:nth-child(2){width:30%;}
+  .buckets th:nth-child(3){width:104px;}
+  .buckets th:nth-child(4){width:118px;}
+  .buckets td{padding:11px 8px;border-top:1px solid var(--line);vertical-align:middle;}
+  .bname{display:flex;align-items:flex-start;gap:10px;}
+  .sw{width:12px;height:12px;border-radius:3px;flex:none;margin-top:4px;}
+  .bname .t{font-weight:600;font-size:.95rem;}
+  .bname .d{color:var(--faint);font-size:.78rem;font-weight:400;}
+  .bname .ideal{color:var(--brass);font-size:.72rem;font-weight:600;white-space:nowrap;}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;min-width:80px;height:4px;border-radius:4px;background:var(--track);outline:none;cursor:pointer;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--thumb);border:2px solid var(--card);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--thumb);border:2px solid var(--card);}
+  .shareedit{display:inline-flex;align-items:center;gap:3px;justify-content:flex-end;}
+  .pctin{width:48px;text-align:right;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:.92rem;border:1px solid var(--line-strong);background:var(--paper);color:var(--ink);border-radius:6px;padding:5px 6px;-moz-appearance:textfield;}
+  .pctin:focus{outline:2px solid var(--forest-2);outline-offset:1px;border-color:var(--forest-2);}
+  .pctin::-webkit-outer-spin-button,.pctin::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .pctsign{color:var(--faint);font-size:.85rem;}
+  .amt{font-weight:600;color:var(--forest-2);font-variant-numeric:tabular-nums;}
+
+  tfoot td{border-top:2px solid var(--line-strong);padding-top:13px;font-weight:600;}
+  .total-pct{padding:3px 10px;border-radius:100px;font-size:.85rem;}
+  .total-pct.ok{background:rgba(47,125,84,.14);color:var(--good);}
+  .total-pct.off{background:rgba(181,70,47,.14);color:var(--bad);}
+
+  .highlight{display:flex;flex-wrap:wrap;gap:18px;margin-top:2px;}
+  .stat{flex:1;min-width:190px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:9px;padding:16px 18px;box-shadow:var(--shadow);}
+  .stat .k{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+  .stat .v{font-size:1.5rem;font-weight:600;color:var(--ink);line-height:1.1;}
+  .stat .v small{font-size:.9rem;color:var(--forest-2);font-weight:600;}
+  .stat .sub{font-size:.8rem;color:var(--muted);margin-top:5px;}
+
+  .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
+  .note b{color:var(--muted);}
+  h2.sec{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;margin:0 0 3px;}
+  .sec-sub{color:var(--muted);font-size:.9rem;margin:0 0 16px;}
+  .reset{background:transparent;border:1px solid var(--line-strong);color:var(--muted);border-radius:7px;padding:8px 13px;font-size:.82rem;cursor:pointer;font-weight:600;}
+  @media (max-width:600px){
+    header.top{padding:24px 20px;}
+    .buckets .hide-sm{display:none;}
+    td.range-cell{width:auto;}
+    .salary-in input{width:120px;font-size:1.25rem;}
+  }
+
+  /* ---- Landscape / present-on-screen layout ---- */
+  @media (min-width:920px) and (min-aspect-ratio:13/10){
+    html,body{overflow:hidden;}
+    .wrap{max-width:none;height:100vh;display:flex;flex-direction:column;padding:0 22px 10px;gap:10px;}
+    header.top{margin:0;padding:13px 26px;flex:none;}
+    header.top h1{font-size:1.5rem;margin-bottom:2px;}
+    header.top p{font-size:.82rem;max-width:120ch;}
+    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:16px;align-items:start;}
+    .lscol{display:flex;flex-direction:column;gap:10px;min-width:0;}
+    .lscol .panel{margin:0;}
+    .panel{padding:15px 18px;}
+    .barwrap{margin:16px 0 4px;}
+    .buckets td{padding:6px 8px;}
+    .bname .d{font-size:.72rem;}
+    .bname .ideal{font-size:.68rem;}
+    .highlight{gap:10px;}
+    .highlight .stat{padding:11px 14px;min-width:120px;}
+    .highlight .stat .v{font-size:1.12rem;}
+    .highlight .stat .sub{display:none;}
+    .note{display:none;}
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">World Financial Planning Day · SWAN L&amp;D &amp; Finance</div>
+    <h1>Money on Purpose</h1>
+    <p>Give every riyal a job before the month spends it for you. Set your take-home pay, then choose how it's shared out.</p>
+  </header>
+
+  <div class="lsgrid">
+  <div class="lscol lscol-a">
+  <div class="panel">
+    <div class="row1">
+      <div>
+        <label class="fld" for="salary">Monthly take-home pay</label>
+        <div class="salary-in">
+          <span class="cur">QAR</span>
+          <input id="salary" type="text" inputmode="numeric" value="3,000" aria-label="Monthly take-home pay">
+        </div>
+      </div>
+      <div>
+        <label class="fld">Plan style</label>
+        <div class="seg" role="group" aria-label="Plan style">
+          <button id="btnSimple" aria-pressed="true">50 / 30 / 20</button>
+          <button id="btnDetailed" aria-pressed="false">Detailed buckets</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="barwrap">
+      <div class="stackbar" id="bar" aria-hidden="true"></div>
+      <div class="barcap"><span id="barMode">The simple starting split</span><button class="reset" id="reset" style="padding:3px 10px;font-size:.74rem;">Reset to defaults</button></div>
+    </div>
+  </div>
+
+  </div>
+
+  <div class="lscol lscol-b">
+  <div class="panel">
+    <table class="buckets">
+      <thead>
+        <tr>
+          <th>Bucket</th>
+          <th class="range-cell hide-sm">Adjust</th>
+          <th class="r">Share</th>
+          <th class="r">Per month</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+      <tfoot>
+        <tr>
+          <td>Total</td>
+          <td class="hide-sm r mono" id="totCheck">—</td>
+          <td class="r"><span class="total-pct ok" id="totPct">100%</span></td>
+          <td class="r amt mono" id="totAmt">—</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="highlight">
+    <div class="stat">
+      <div class="k">Building your future</div>
+      <div class="v mono" id="futureAmt">—</div>
+      <div class="sub" id="futureSub">Invest + emergency + goals each month.</div>
+    </div>
+    <div class="stat">
+      <div class="k">Living for today</div>
+      <div class="v mono" id="todayAmt">—</div>
+      <div class="sub">Essentials + guilt-free spending — no shame in it.</div>
+    </div>
+    <div class="stat" style="border-left-color:var(--forest-2)">
+      <div class="k">Your savings rate</div>
+      <div class="v mono" id="rate">—<small> of pay</small></div>
+      <div class="sub" id="rateSub">The single number that builds wealth over time.</div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <p class="note">
+    <b>How to read this:</b> percentages are a starting point, not a rule — drag a slider <em>or type a number straight into the Share column</em> and watch the amounts update. The classic <b>50/30/20</b> is 50% needs, 30% wants, 20% savings &amp; debt. The <b>detailed buckets</b> break that "20%" into the jobs that actually move your life forward. The <b>ideal %</b> beside each bucket is a common guideline — your life may call for something different, and that's fine.<br><br>
+    All amounts are in Qatari Riyal (QAR). This is an educational planning aid, not financial advice.
+  </p>
+</div>
+
+<script>
+(function(){
+  var PRESETS = {
+    simple: [
+      {k:"needs", t:"Needs", d:"Rent, food, transport, bills", ideal:"50%", pct:50, c:"--b1", today:true},
+      {k:"wants", t:"Wants", d:"Fun, dining, subscriptions", ideal:"30%", pct:30, c:"--b5", today:true},
+      {k:"save",  t:"Savings & debt", d:"Future + clearing loans", ideal:"20%", pct:20, c:"--b2", save:true, future:true}
+    ],
+    detailed: [
+      {k:"ess",  t:"Essentials", d:"Rent, food, transport, bills", ideal:"50%", pct:50, c:"--b1", today:true},
+      {k:"free", t:"Financial freedom", d:"Invested for the long term", ideal:"10–15%", pct:12, c:"--b2", future:true, save:true},
+      {k:"emg",  t:"Emergency fund", d:"3–6 months of expenses", ideal:"5–10%", pct:8, c:"--b3", future:true, save:true},
+      {k:"debt", t:"Debt repayment", d:"Loans, cards — clear them", ideal:"5–10%", pct:8, c:"--b4", save:true},
+      {k:"goal", t:"Short-term goals", d:"Car, trip home, wedding", ideal:"5–10%", pct:8, c:"--b7", future:true},
+      {k:"play", t:"Guilt-free spending", d:"Yours to enjoy, no shame", ideal:"5–10%", pct:8, c:"--b6", today:true},
+      {k:"dev",  t:"Personal development", d:"Courses, skills, books", ideal:"~5%", pct:4, c:"--b8", future:true},
+      {k:"give", t:"Giving", d:"Family, charity, zakat", ideal:"2–5%", pct:2, c:"--b8"}
+    ]
+  };
+  var mode="simple", data=clone(PRESETS.simple);
+  var $=function(id){return document.getElementById(id)};
+  function clone(a){return a.map(function(o){return Object.assign({},o)})}
+  function num(v){v=(""+v).replace(/[^0-9.]/g,"");return v===""?0:parseFloat(v)}
+  function fmt(n){return Math.round(n).toLocaleString("en-US")}
+
+  function render(){
+    var rows=$("rows"); rows.innerHTML="";
+    var bar=$("bar"); bar.innerHTML="";
+    data.forEach(function(b,i){
+      var tr=document.createElement("tr");
+      tr.innerHTML=
+        '<td><div class="bname"><span class="sw" style="background:var('+b.c+')"></span>'
+        +'<span><span class="t">'+b.t+'</span><br><span class="d">'+b.d+'</span> <span class="ideal">ideal '+b.ideal+'</span></span></div></td>'
+        +'<td class="range-cell hide-sm"><input type="range" min="0" max="100" value="'+b.pct+'" data-i="'+i+'" aria-label="Adjust '+b.t+'"></td>'
+        +'<td class="r"><span class="shareedit"><input type="number" class="pctin" min="0" max="100" step="1" value="'+b.pct+'" data-i="'+i+'" aria-label="'+b.t+' share percent"><span class="pctsign">%</span></span></td>'
+        +'<td class="r amt mono" data-amt="'+i+'"></td>';
+      rows.appendChild(tr);
+      var s=document.createElement("span");
+      s.style.background="var("+b.c+")"; s.dataset.i=i; s.title=b.t;
+      bar.appendChild(s);
+    });
+    rows.querySelectorAll('input[type=range]').forEach(function(r){
+      r.addEventListener('input',function(){
+        var i=+this.dataset.i; data[i].pct=+this.value;
+        var box=rows.querySelector('.pctin[data-i="'+i+'"]'); if(box) box.value=this.value;
+        compute();
+      });
+    });
+    rows.querySelectorAll('.pctin').forEach(function(n){
+      n.addEventListener('input',function(){
+        var i=+this.dataset.i, v=parseInt(this.value,10);
+        if(isNaN(v)) v=0; v=Math.max(0,Math.min(100,v));
+        data[i].pct=v;
+        var rg=rows.querySelector('input[type=range][data-i="'+i+'"]'); if(rg) rg.value=v;
+        compute();
+      });
+      n.addEventListener('blur',function(){ this.value=data[+this.dataset.i].pct; });
+    });
+    compute();
+  }
+
+  function compute(){
+    var salary=num($("salary").value);
+    var tot=data.reduce(function(s,b){return s+b.pct},0);
+    var bar=$("bar");
+    data.forEach(function(b,i){
+      var span=bar.querySelector('span[data-i="'+i+'"]');
+      if(span) span.style.flexBasis=(tot>0?(b.pct/tot*100):0)+"%";
+      var amtEl=document.querySelector('#rows [data-amt="'+i+'"]');
+      if(amtEl) amtEl.textContent="QAR "+fmt(salary*b.pct/100);
+    });
+    var tp=$("totPct"); tp.textContent=tot+"%";
+    tp.className="total-pct "+(tot===100?"ok":"off");
+    $("totCheck").textContent = tot===100? "Balanced" : (tot<100? (100-tot)+"% unassigned" : (tot-100)+"% over");
+    $("totCheck").style.color = tot===100? "var(--good)":"var(--bad)";
+    $("totAmt").textContent="QAR "+fmt(salary*tot/100);
+    var future=0, today=0, save=0;
+    data.forEach(function(b){
+      if(b.future) future+=b.pct;
+      if(b.today) today+=b.pct;
+      if(b.save||b.future) save+=b.pct;
+    });
+    $("futureAmt").textContent="QAR "+fmt(salary*future/100);
+    $("todayAmt").textContent="QAR "+fmt(salary*today/100);
+    $("rate").innerHTML=save+"%<small> of pay</small>";
+    $("rateSub").textContent = save>=20? "Strong — you're paying your future first." : save>=10? "A solid habit; nudge it up when you can." : "Even a small bump here compounds hugely.";
+  }
+
+  function setMode(m){
+    mode=m; data=clone(PRESETS[m]);
+    $("btnSimple").setAttribute("aria-pressed", m==="simple");
+    $("btnDetailed").setAttribute("aria-pressed", m==="detailed");
+    $("barMode").textContent = m==="simple"? "The simple starting split" : "Every riyal given a job";
+    $("futureSub").textContent = m==="simple"? "Your 20% savings & debt line." : "Invest + emergency + goals + growth.";
+    render();
+  }
+
+  $("salary").addEventListener("input",function(){
+    var raw=num(this.value);
+    this.value = raw? fmt(raw) : "";
+    compute();
+  });
+  $("btnSimple").addEventListener("click",function(){setMode("simple")});
+  $("btnDetailed").addEventListener("click",function(){setMode("detailed")});
+  $("reset").addEventListener("click",function(){setMode(mode)});
+
+  render();
+})();
+</script>

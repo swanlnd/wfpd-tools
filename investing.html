@@ -1,0 +1,190 @@
+<title>Getting Started with Investing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#f4f2ea; --card:#fbfaf5; --ink:#16241e; --muted:#586a60; --faint:#7d8c82;
+    --line:#dcdacc; --line-strong:#c9c6b4; --forest:#1f4a3d; --forest-2:#2f6f5e;
+    --brass:#9c701f; --brass-soft:#ecdfc2;
+    --cash:#2e6fb8; --fd:#b0812f; --bond:#5b7a52; --etf:#0d8f74;
+    --warn-bg:#f6e6dd; --warn-fg:#8a3d22; --warn-line:#d9a488;
+    --shadow:0 1px 0 rgba(22,36,30,.04), 0 12px 30px -22px rgba(22,36,30,.5);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --cash:#4f93d6; --fd:#d6a24a; --bond:#8fb083; --etf:#34b892;
+    --warn-bg:#2e1d15; --warn-fg:#e8a988; --warn-line:#7a4a34;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --cash:#4f93d6; --fd:#d6a24a; --bond:#8fb083; --etf:#34b892;
+    --warn-bg:#2e1d15; --warn-fg:#e8a988; --warn-line:#7a4a34;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.62;-webkit-font-smoothing:antialiased;}
+  .sheet{max-width:860px;margin:0 auto;padding:0 20px 64px;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+
+  .masthead{background:var(--forest);color:#f4f2ea;border-radius:0 0 6px 6px;padding:36px 40px 30px;margin-bottom:20px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft);margin-bottom:14px;}
+  .masthead h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(2rem,5vw,3rem);line-height:1.03;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance;}
+  .masthead p{margin:0;color:rgba(244,242,234,.85);max-width:60ch;font-size:1rem;}
+  .banner{background:var(--brass-soft);color:var(--ink);border-radius:8px;padding:11px 16px;font-size:.86rem;margin-bottom:26px;border:1px solid var(--line-strong);}
+  .banner b{color:var(--brass);}
+
+  .sec-label{display:flex;align-items:center;gap:14px;margin:30px 2px 16px;}
+  .sec-label .n{font-family:"IBM Plex Mono",monospace;font-size:.8rem;font-weight:600;color:var(--brass);}
+  .sec-label h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.35rem;margin:0;letter-spacing:-.01em;}
+  .sec-label::after{content:"";height:1px;flex:1;background:var(--line-strong);}
+
+  p.lead{color:var(--muted);max-width:66ch;margin:0 0 16px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:12px;}
+  .card h3{margin:0 0 5px;font-size:1.05rem;font-weight:600;}
+  .card p{margin:0;color:var(--muted);font-size:.94rem;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){ .grid2{grid-template-columns:1fr;} .masthead{padding:28px 22px;} }
+
+  .step{display:grid;grid-template-columns:34px 1fr;gap:4px 14px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;box-shadow:var(--shadow);margin-bottom:10px;}
+  .step .num{grid-row:1 / span 2;font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem;color:var(--brass);line-height:1;padding-top:2px;}
+  .step h3{margin:0 0 3px;font-size:1.04rem;font-weight:600;}
+  .step p{margin:0;color:var(--muted);font-size:.93rem;}
+
+  .ladder{display:flex;flex-direction:column;gap:7px;margin:4px 0 6px;}
+  .rung{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:11px 15px;box-shadow:var(--shadow);}
+  .rung .dot{width:13px;height:13px;border-radius:4px;flex:none;}
+  .rung .t{font-weight:600;font-size:.96rem;}
+  .rung .d{color:var(--faint);font-size:.85rem;}
+  .rung .t small{display:block;font-weight:400;color:var(--muted);font-size:.82rem;margin-top:1px;}
+  .axis{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:2px 4px 0;}
+
+  ul.check{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;}
+  ul.check li{position:relative;padding-left:26px;font-size:.94rem;color:var(--ink);}
+  ul.check li::before{content:"?";position:absolute;left:0;top:0;width:18px;height:18px;border-radius:5px;background:var(--brass-soft);color:var(--brass);font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;display:flex;align-items:center;justify-content:center;}
+  ul.check li b{font-weight:600;} ul.check li span{color:var(--muted);}
+  @media (max-width:560px){ ul.check{grid-template-columns:1fr;} }
+
+  .warn{background:var(--warn-bg);border:1px solid var(--warn-line);border-left:4px solid var(--warn-fg);border-radius:9px;padding:18px 20px;}
+  .warn h3{margin:0 0 10px;color:var(--warn-fg);font-size:1.05rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .warn ul{margin:0;padding-left:18px;color:var(--ink);}
+  .warn li{margin-bottom:6px;font-size:.92rem;}
+  .warn li b{color:var(--warn-fg);}
+
+  .habits{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .habit{display:flex;gap:11px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px 15px;box-shadow:var(--shadow);}
+  .habit .k{font-family:"IBM Plex Mono",monospace;color:var(--etf);font-weight:600;font-size:.9rem;flex:none;}
+  .habit .x b{font-size:.95rem;} .habit .x p{margin:2px 0 0;color:var(--muted);font-size:.85rem;}
+  @media (max-width:560px){ .habits{grid-template-columns:1fr;} }
+
+  .reg{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px 20px;box-shadow:var(--shadow);}
+  .reg .r{display:flex;gap:12px;padding:9px 0;border-top:1px solid var(--line);font-size:.92rem;}
+  .reg .r:first-of-type{border-top:0;}
+  .reg .r b{font-family:"IBM Plex Mono",monospace;color:var(--forest-2);min-width:70px;}
+  .reg .r span{color:var(--muted);}
+
+  .disclaimer{margin-top:30px;border:1.5px solid var(--brass);border-radius:10px;padding:20px 22px;background:var(--card);}
+  .disclaimer .tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);font-weight:600;margin-bottom:8px;}
+  .disclaimer p{margin:0 0 8px;font-size:.85rem;color:var(--muted);line-height:1.55;}
+  .disclaimer .draft{display:inline-block;margin-top:4px;background:var(--warn-bg);color:var(--warn-fg);border:1px solid var(--warn-line);border-radius:6px;padding:4px 10px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;font-weight:600;}
+
+  .foot{margin-top:26px;padding-top:16px;border-top:2px solid var(--forest);font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-2);}
+  .foot b{color:var(--ink);}
+  a{color:var(--brass);}
+  @media print{ body{background:#fff;} .card,.step,.rung,.habit,.reg,.disclaimer{box-shadow:none;break-inside:avoid;} .masthead{border-radius:0;} }
+</style>
+
+<div class="sheet">
+  <header class="masthead">
+    <div class="eyebrow">World Financial Planning Day · SWAN L&amp;D &amp; Finance</div>
+    <h1>Getting Started with Investing</h1>
+    <p>A plain-language, general guide to how investing works and how people begin — so the ideas from today's session have somewhere to go next.</p>
+  </header>
+
+  <div class="banner"><b>Read this first:</b> this is general education, not financial advice, and it names no products to buy. It's a map of how things work — the personal decisions, and the choice of any provider, are yours (ideally with a licensed adviser). Full disclaimer at the end.</div>
+
+  <div class="sec-label"><span class="n">01</span><h2>Before you invest a single riyal</h2></div>
+  <p class="lead">Investing sits on top of a foundation. Get these in place first — they matter more than picking the "right" investment.</p>
+  <div class="step"><div class="num">1</div><h3>Build an emergency fund</h3><p>Three to six months of essential expenses, kept in cash you can reach instantly. It's what stops a surprise from forcing you to sell investments at a bad time.</p></div>
+  <div class="step"><div class="num">2</div><h3>Clear expensive debt</h3><p>Paying off a loan or card charging 12–18% is a guaranteed "return" no investment can promise. Knock down high-interest debt before investing spare cash.</p></div>
+  <div class="step"><div class="num">3</div><h3>Know your goal and your timeline</h3><p>Money you need within 2–3 years shouldn't be in the stock market. The longer you can leave it, the more comfortably you can take on ups and downs.</p></div>
+
+  <div class="sec-label"><span class="n">02</span><h2>The ladder: risk and reward travel together</h2></div>
+  <p class="lead">There's no free lunch — higher expected returns come with bigger ups and downs. Roughly, from steadier to bumpier:</p>
+  <div class="ladder">
+    <div class="rung"><span class="dot" style="background:var(--cash)"></span><span class="t">Cash &amp; savings<small>Safe, liquid — but usually loses to inflation over time.</small></span></div>
+    <div class="rung"><span class="dot" style="background:var(--fd)"></span><span class="t">Fixed deposit / term deposit<small>A set, modest return for locking money away a while.</small></span></div>
+    <div class="rung"><span class="dot" style="background:var(--bond)"></span><span class="t">Bonds &amp; sukuk<small>Lending to a government or company for regular income; sukuk are the Sharia-compliant form.</small></span></div>
+    <div class="rung"><span class="dot" style="background:var(--etf)"></span><span class="t">Shares &amp; ETFs<small>Owning slices of many companies — highest long-run potential, real short-term swings, not guaranteed.</small></span></div>
+  </div>
+  <div class="axis"><span>◂ steadier · lower return</span><span>bumpier · higher potential ▸</span></div>
+
+  <div class="sec-label"><span class="n">03</span><h2>Two words, in plain language</h2></div>
+  <div class="grid2">
+    <div class="card"><h3>A brokerage account</h3><p>Simply the "account" that lets you buy and hold investments, the way a bank account holds cash. You open one, move money in, and use it to buy funds or shares.</p></div>
+    <div class="card"><h3>An ETF</h3><p>An "exchange-traded fund" — one purchase that spreads your money across hundreds of companies at once (for example, a whole stock-market index). Instant diversification, usually at very low cost.</p></div>
+  </div>
+
+  <div class="sec-label"><span class="n">04</span><h2>Ways people invest from Qatar</h2></div>
+  <p class="lead">These are the general <em>categories</em> — not recommendations. Whichever route, the golden rule is the same: <b>confirm the provider is properly licensed and regulated</b> before you send any money.</p>
+  <div class="card"><h3>Your bank's investment services</h3><p>Many banks in Qatar offer funds or investment accounts to existing customers — convenient, though costs and choice vary. Ask about fees and what you're actually buying.</p></div>
+  <div class="card"><h3>Locally licensed brokers &amp; platforms</h3><p>Firms authorised to offer investments in Qatar. Check they're regulated (see section 08) and compare fees before committing.</p></div>
+  <div class="card"><h3>International online brokers</h3><p>Global platforms some residents use for low-cost access to world markets. Convenient, but check eligibility for your residency, currency and withdrawal costs, and how you'd move money home later.</p></div>
+  <div class="card" style="border-left:3px solid var(--etf)"><h3>Prefer Sharia-compliant?</h3><p>Islamic funds, Sharia-screened ETFs, and sukuk exist across all of the above. If this matters to you, ask specifically for Sharia-compliant options and their screening.</p></div>
+
+  <div class="sec-label"><span class="n">05</span><h2>Before you pick a platform — checklist</h2></div>
+  <p class="lead">Run any provider past these questions first:</p>
+  <ul class="check">
+    <li><b>Regulated?</b> <span>By whom — and can you verify it?</span></li>
+    <li><b>Fees &amp; FX?</b> <span>Account, trading, and currency-conversion costs.</span></li>
+    <li><b>Minimums?</b> <span>Smallest amount to start and to add.</span></li>
+    <li><b>Getting money out?</b> <span>How, how fast, and cost to send home.</span></li>
+    <li><b>Sharia option?</b> <span>Available if you need it.</span></li>
+    <li><b>Reputation?</b> <span>Track record and independent reviews.</span></li>
+  </ul>
+
+  <div class="sec-label"><span class="n">06</span><h2>Red flags — walk away</h2></div>
+  <div class="warn">
+    <h3>⚠ If you see these, stop</h3>
+    <ul>
+      <li><b>"Guaranteed" high returns.</b> Real investments never guarantee big gains. This is the single most common sign of a scam.</li>
+      <li><b>Pressure to act now.</b> "Limited time," "today only," rushing you past questions.</li>
+      <li><b>Unregulated "advisers" or tips</b> via WhatsApp, social media, crypto/forex "signals," or a friend-of-a-friend.</li>
+      <li><b>Upfront fees to "unlock" your money,</b> or being asked to pay a person directly.</li>
+      <li><b>Vague or evasive answers</b> about who regulates them and where your money is held.</li>
+    </ul>
+  </div>
+
+  <div class="sec-label"><span class="n">07</span><h2>Boring habits that quietly win</h2></div>
+  <div class="habits">
+    <div class="habit"><span class="k">01</span><span class="x"><b>Start small, start now</b><p>Time in the market beats waiting for the perfect moment.</p></span></div>
+    <div class="habit"><span class="k">02</span><span class="x"><b>Automate monthly</b><p>A fixed amount each month — that's dollar-cost averaging, working for you.</p></span></div>
+    <div class="habit"><span class="k">03</span><span class="x"><b>Diversify</b><p>Spread across many companies (an ETF does this in one buy).</p></span></div>
+    <div class="habit"><span class="k">04</span><span class="x"><b>Keep costs low</b><p>Fees compound against you just like returns compound for you.</p></span></div>
+    <div class="habit"><span class="k">05</span><span class="x"><b>Ignore the noise</b><p>Headlines and hot tips are not a plan; don't panic-sell dips.</p></span></div>
+    <div class="habit"><span class="k">06</span><span class="x"><b>Think in decades</b><p>Set it, keep adding, and let compounding do the slow work.</p></span></div>
+  </div>
+
+  <div class="sec-label"><span class="n">08</span><h2>Getting personal advice — and checking who's legit</h2></div>
+  <p class="lead">For guidance tailored to <em>your</em> situation, speak with a <b>licensed, regulated financial adviser</b>. To check that a firm or adviser is authorised, verify with the relevant Qatar regulator:</p>
+  <div class="reg">
+    <div class="r"><b>QFMA</b><span>Qatar Financial Markets Authority — regulates the securities markets and listed investments.</span></div>
+    <div class="r"><b>QFCRA</b><span>Qatar Financial Centre Regulatory Authority — regulates firms operating within the Qatar Financial Centre.</span></div>
+    <div class="r"><b>QCB</b><span>Qatar Central Bank — oversees banks and insurance.</span></div>
+  </div>
+  <p class="lead" style="margin-top:12px;font-size:.86rem;">If you're not a Qatar national or plan to retire elsewhere, also consider the rules in your home country — tax and residency treatment differ and change over time. Check official sources.</p>
+
+  <div class="disclaimer">
+    <div class="tag">Important — please read</div>
+    <p>This material is general financial education from SWAN L&amp;D &amp; Finance, prepared for World Financial Planning Day. It is for information and learning only — it is <b>not</b> financial, investment, tax, or legal advice, and it does not consider your personal circumstances.</p>
+    <p>Nothing here recommends any product, strategy, or provider; any categories or names shown are illustrations, not endorsements. Investing carries risk, including the loss of capital, and past performance does not guarantee future results.</p>
+    <p>Before making any decision, confirm that any provider is properly licensed and regulated, and consider speaking with a licensed financial adviser. SWAN L&amp;D &amp; Finance and the session's presenters accept no liability for decisions made on the basis of this material.</p>
+  </div>
+
+  <div class="foot"><b>SWAN L&amp;D &amp; Finance</b> · World Financial Planning Day 2026 · General education, not advice</div>
+</div>
