@@ -1,0 +1,123 @@
+<title>Your Private Budget — Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#f4f2ea; --card:#fbfaf5; --ink:#16241e; --muted:#586a60; --faint:#7d8c82;
+    --line:#dcdacc; --line-strong:#c9c6b4; --forest:#1f4a3d; --forest-2:#2f6f5e;
+    --brass:#9c701f; --brass-soft:#ecdfc2;
+    --note-bg:#eef3f7; --note-fg:#2e6fb8; --note-line:#b9d2e6;
+    --shadow:0 1px 0 rgba(22,36,30,.04), 0 12px 30px -22px rgba(22,36,30,.5);
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme: dark){
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --note-bg:#16232e; --note-fg:#7fb4e0; --note-line:#2c4257;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }}
+  :root[data-theme="dark"]{
+    --paper:#0e1512; --card:#15201b; --ink:#eaf1ec; --muted:#a4b4aa; --faint:#83978c;
+    --line:#243029; --line-strong:#31423a; --forest:#8fc9b3; --forest-2:#a7d8c4;
+    --brass:#dcb166; --brass-soft:#3a3120;
+    --note-bg:#16232e; --note-fg:#7fb4e0; --note-line:#2c4257;
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -22px rgba(0,0,0,.8);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .sheet{max-width:800px;margin:0 auto;padding:0 20px 60px;}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+  .kbd{font-family:"IBM Plex Mono",monospace;font-size:.85em;background:var(--brass-soft);color:var(--brass);padding:1px 6px;border-radius:5px;white-space:nowrap;}
+  .code{grid-column:2;display:block;background:#13251d;color:#e9f3ee;border-radius:8px;padding:12px 14px;font-family:"IBM Plex Mono",monospace;font-size:.75rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:9px;border:1px solid #24463a;}
+
+  .masthead{background:var(--forest);color:#f4f2ea;border-radius:0 0 6px 6px;padding:34px 38px 28px;margin-bottom:18px;}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-soft);margin-bottom:12px;}
+  .masthead h1{font-family:"Fraunces",Georgia,serif;font-weight:600;font-size:clamp(1.9rem,4.6vw,2.8rem);line-height:1.04;margin:0 0 10px;letter-spacing:-.01em;text-wrap:balance;}
+  .masthead p{margin:0;color:rgba(244,242,234,.85);max-width:60ch;font-size:.98rem;}
+
+  .privacy{background:var(--brass-soft);color:var(--ink);border:1px solid var(--line-strong);border-radius:9px;padding:15px 18px;margin-bottom:14px;}
+  .privacy b{color:var(--brass);}
+  .assume{background:var(--note-bg);border:1px solid var(--note-line);border-radius:9px;padding:12px 16px;margin-bottom:26px;font-size:.85rem;color:var(--ink);}
+  .assume b{color:var(--note-fg);}
+
+  .phase{display:flex;align-items:baseline;gap:12px;margin:30px 2px 14px;}
+  .phase h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.3rem;margin:0;letter-spacing:-.01em;}
+  .phase .time{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);background:var(--brass-soft);padding:3px 9px;border-radius:100px;white-space:nowrap;}
+  .phase::after{content:"";height:1px;flex:1;background:var(--line-strong);}
+
+  .step{display:grid;grid-template-columns:36px 1fr;gap:3px 15px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:15px 18px;box-shadow:var(--shadow);margin-bottom:10px;}
+  .step>*{grid-column:2;}
+  .step .num{grid-column:1;grid-row:1 / span 2;font-family:"Fraunces",serif;font-weight:600;font-size:1.4rem;color:var(--brass);line-height:1;padding-top:2px;font-variant-numeric:tabular-nums;}
+  .step h3{margin:0 0 3px;font-size:1.02rem;font-weight:600;}
+  .step p{margin:0;color:var(--muted);font-size:.93rem;}
+  .step p + p{margin-top:6px;}
+  .step .path{color:var(--forest-2);font-weight:600;}
+
+  .flag{grid-column:2;border-left:3px solid var(--note-fg);background:var(--note-bg);border-radius:0 8px 8px 0;padding:10px 14px;margin-top:8px;font-size:.86rem;color:var(--ink);}
+  .flag b{color:var(--note-fg);}
+
+  .tips{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 20px;box-shadow:var(--shadow);}
+  .tips .row{padding:12px 0;border-top:1px solid var(--line);}
+  .tips .row:first-child{border-top:0;}
+  .tips .q{font-weight:600;font-size:.95rem;margin:0 0 3px;}
+  .tips .a{color:var(--muted);font-size:.9rem;margin:0;}
+
+  .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:24px;padding-top:16px;border-top:1px solid var(--line);}
+  .foot{margin-top:20px;padding-top:16px;border-top:2px solid var(--forest);font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--forest-2);}
+  .foot b{color:var(--ink);}
+  a{color:var(--brass);}
+  @media (max-width:560px){ .masthead{padding:26px 22px;} }
+  @media print{ body{background:#fff;} .step,.tips{box-shadow:none;break-inside:avoid;} .masthead{border-radius:0;} }
+</style>
+
+<div class="sheet">
+  <header class="masthead">
+    <div class="eyebrow">World Financial Planning Day · SWAN L&amp;D &amp; Finance</div>
+    <h1>Set Up Your Private Budget</h1>
+    <p>A step-by-step guide to using the <b>Aspire budget sheet</b> and the <b>phone input form</b> — set up once, then log spending in seconds. Everything stays in your own Google account.</p>
+  </header>
+
+  <div class="privacy">🔒 <b>Your data stays yours.</b> You'll make your <b>own copy</b> of both files into your own Google Drive. Your salary and spending are never shared with L&amp;D or anyone at work — this is a tool for <em>you</em>.</div>
+
+  <div class="assume"><b>Heads-up:</b> these steps assume the input Form is linked to a responses tab in the sheet, and that each person keeps their own private copy. If your setup differs, tell MZ and the steps can be adjusted.</div>
+
+  <div class="phase"><h2>Part 1 · Make your own copies</h2><span class="time">~3 min</span></div>
+  <div class="step"><div class="num">1</div><h3>Copy the budget sheet</h3><p><a href="https://docs.google.com/spreadsheets/d/1xRYRTwKQz3ZYxai6nJK9Mu3zkZ6by4lytIHN67OLaqQ/copy"><b>Open the Aspire Budgeting sheet →</b></a> It will ask <b>"Make a copy?"</b> — click <span class="path">Make a copy</span> and it saves to your own Google Drive. This copy is now yours and private.</p></div>
+  <div class="step"><div class="num">2</div><h3>Copy the input form</h3><p><a href="https://docs.google.com/forms/d/1aPoTntWzukedWKcT-bsngJ8aafyDOXM_wldQgVJkSs4/copy"><b>Open the Aspire Budget input form →</b></a> Click <span class="path">Make a copy</span> to save your own version into your Drive.</p>
+    <div class="flag"><b>Why copy, not just fill it in?</b> If you type into the shared form, your spending would flow to the L&amp;D account. Your own copy keeps every number in your Drive only.</div></div>
+
+  <div class="phase"><h2>Part 2 · Connect your form to your sheet</h2><span class="time">~4 min</span></div>
+  <div class="step"><div class="num">3</div><h3>Link the form to your sheet</h3><p>Open <b>your copied form</b> → the <span class="path">Responses</span> tab → click <span class="path">Link to Sheets</span> → choose <b>Select existing spreadsheet</b> → pick <b>your copied Aspire sheet</b>.</p><p>A new tab called <span class="path">Form Responses 1</span> appears in your sheet — that's where entries land.</p></div>
+  <div class="step"><div class="num">4</div><h3>Pull responses into Transactions — one formula, no dragging</h3><p>Open the <span class="path">Transactions</span> tab, click the <b>first empty DATE cell</b> in the entries area, and paste this in:</p>
+    <span class="code">={
+  QUERY('Form Responses 1'!$B$2:$F, "select B, C where B is not null", 0),
+  ARRAYFORMULA(IF(QUERY('Form Responses 1'!$B$2:$B, "select B where B is not null", 0)="","","")),
+  QUERY('Form Responses 1'!$B$2:$F, "select D, E, F where B is not null", 0)
+}</span>
+    <p>This fills <b>DATE, OUTFLOW, (blank INFLOW), CATEGORY, ACCOUNT, MEMO</b> in one go, and grows by itself as you add entries — no dragging, ever.</p>
+    <div class="flag"><b>Match it to your form:</b> the letters (<span class="kbd">B</span> date, <span class="kbd">C</span> amount, <span class="kbd">D</span> category, <span class="kbd">E</span> account, <span class="kbd">F</span> memo) must match your <span class="path">Form Responses 1</span> column order, and the tab name must match exactly. If your columns sit elsewhere, just swap the letters.</div></div>
+  <div class="step"><div class="num">5</div><h3>Do a test entry</h3><p>Submit one dummy expense in your form, then check it appears on the <span class="path">Transactions</span> tab and shows up on the <span class="path">Dashboard</span>.</p>
+    <div class="flag"><b>Nothing showing?</b> Check the tab name and column letters in the formula, and make sure the category/account names in your form match the <span class="path">Configuration</span> tab exactly — or ask MZ.</div></div>
+
+  <div class="phase"><h2>Part 3 · Set it up for your life</h2><span class="time">~10 min</span></div>
+  <div class="step"><div class="num">6</div><h3>Set your income &amp; categories</h3><p>In your sheet, open the <span class="path">Configuration</span> tab. Enter your <b>monthly take-home pay</b>, then rename/add <b>categories</b> (rent, groceries, petrol, phone, fun money, savings…) and your <b>accounts</b> so they match how you actually live.</p></div>
+  <div class="step"><div class="num">7</div><h3>Enter your starting balances</h3><p>On the <span class="path">Transactions</span> tab, add your current balance for each account so the sheet starts from reality.</p></div>
+  <div class="step"><div class="num">8</div><h3>Give every riyal a job</h3><p>On <span class="path">Category Transfers</span>, move your income from "available to budget" into each category until it's all assigned. Check the <span class="path">Dashboard</span> to see the plan.</p></div>
+
+  <div class="phase"><h2>Part 4 · Use it every day</h2><span class="time">~30 sec</span></div>
+  <div class="step"><div class="num">9</div><h3>Put the form one tap away</h3><p>Open your form on your phone → browser menu → <span class="path">Add to Home screen</span> (or bookmark it). Now logging a spend is one tap.</p></div>
+  <div class="step"><div class="num">10</div><h3>Log as you spend</h3><p>Bought something? Open the form, fill in <b>date, amount, category, account,</b> and a short <b>note</b>, then <b>Submit</b>. Takes seconds — do it on the spot so nothing's forgotten.</p></div>
+  <div class="step"><div class="num">11</div><h3>Check in weekly</h3><p>Once a week, open your sheet → <span class="path">Dashboard</span> to see where you stand, and <span class="path">Reports</span> for the trends. Adjust categories on <span class="path">Category Transfers</span> as life happens.</p></div>
+
+  <div class="phase"><h2>Handy to know</h2></div>
+  <div class="tips">
+    <div class="row"><p class="q">My entry isn't showing up</p><p class="a">Check the pull formula in Transactions (Part 2, step 4) — the tab name and column letters must match your Form Responses 1 tab, and category/account names must match the Configuration tab exactly.</p></div>
+    <div class="row"><p class="q">Keep names identical</p><p class="a">The #1 cause of trouble is a category typed differently in the form vs the sheet. Copy-paste names to be safe.</p></div>
+    <div class="row"><p class="q">It's your data — always</p><p class="a">Nobody at work can see your copy. To stop using it, just delete your copies from your Drive.</p></div>
+    <div class="row"><p class="q">Want the fancy extras?</p><p class="a">Aspire offers an optional paid add-on for automatic bank-statement imports. Totally optional — the free manual way keeps your data most private.</p></div>
+  </div>
+
+  <p class="note">This setup guide is part of SWAN L&amp;D &amp; Finance's World Financial Planning Day resources. The budgeting sheet is the free community "Aspire Budgeting" template; product names are for reference, not endorsements. This is general educational material, not financial advice.</p>
+  <div class="foot"><b>SWAN L&amp;D &amp; Finance</b> · World Financial Planning Day 2026 · Your data stays yours</div>
+</div>

@@ -52,7 +52,8 @@
 
   .barwrap{margin:22px 0 6px;}
   .stackbar{display:flex;width:100%;height:34px;border-radius:7px;overflow:hidden;gap:2px;background:var(--track);}
-  .stackbar span{flex:0 0 auto;transition:flex-basis .28s ease, background .2s;min-width:2px;}
+  .stackbar span{flex:0 0 auto;transition:flex-basis .28s ease, background .2s;min-width:2px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:default;}
+  .seglabel{font-family:"IBM Plex Sans",sans-serif;font-size:.72rem;font-weight:600;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 4px;pointer-events:none;}
   .barcap{display:flex;justify-content:space-between;font-size:.78rem;color:var(--faint);margin-top:8px;}
 
   table.buckets{width:100%;border-collapse:collapse;margin-top:4px;table-layout:fixed;}
@@ -91,6 +92,7 @@
 
   .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
   .note b{color:var(--muted);}
+  .credit{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:16px;}
   h2.sec{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;margin:0 0 3px;}
   .sec-sub{color:var(--muted);font-size:.9rem;margin:0 0 16px;}
   .reset{background:transparent;border:1px solid var(--line-strong);color:var(--muted);border-radius:7px;padding:8px 13px;font-size:.82rem;cursor:pointer;font-weight:600;}
@@ -103,23 +105,26 @@
 
   /* ---- Landscape / present-on-screen layout ---- */
   @media (min-width:920px) and (min-aspect-ratio:13/10){
-    html,body{overflow:hidden;}
-    .wrap{max-width:none;height:100vh;display:flex;flex-direction:column;padding:0 22px 10px;gap:10px;}
-    header.top{margin:0;padding:13px 26px;flex:none;}
-    header.top h1{font-size:1.5rem;margin-bottom:2px;}
-    header.top p{font-size:.82rem;max-width:120ch;}
-    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(300px,36%) 1fr;gap:16px;align-items:start;}
-    .lscol{display:flex;flex-direction:column;gap:10px;min-width:0;}
-    .lscol .panel{margin:0;}
-    .panel{padding:15px 18px;}
-    .barwrap{margin:16px 0 4px;}
+    .wrap{max-width:none;min-height:100vh;display:flex;flex-direction:column;padding:0 20px 12px;gap:9px;}
+    header.top{margin:0;padding:12px 26px;flex:none;}
+    header.top h1{font-size:1.45rem;margin-bottom:2px;}
+    header.top p{font-size:.8rem;max-width:130ch;}
+    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(320px,40%) 1fr;
+      grid-template-rows:min-content min-content 1fr;
+      grid-template-areas:"controls chart" "stats chart" "spacer chart";
+      gap:10px 16px;}
+    .lsgrid .panel{margin:0;}
+    .area-controls{grid-area:controls;}
+    .area-stats{grid-area:stats;}
+    .area-chart{grid-area:chart;align-self:start;min-width:0;}
+    .panel{padding:13px 16px;}
+    .barwrap{margin:14px 0 2px;}
     .buckets td{padding:6px 8px;}
     .bname .d{font-size:.72rem;}
     .bname .ideal{font-size:.68rem;}
-    .highlight{gap:10px;}
-    .highlight .stat{padding:11px 14px;min-width:120px;}
-    .highlight .stat .v{font-size:1.12rem;}
-    .highlight .stat .sub{display:none;}
+    .area-stats{display:flex;flex-direction:column;gap:9px;}
+    .area-stats .stat{padding:11px 15px;min-width:0;}
+    .area-stats .stat .v{font-size:1.1rem;}
     .note{display:none;}
   }
 </style>
@@ -132,8 +137,7 @@
   </header>
 
   <div class="lsgrid">
-  <div class="lscol lscol-a">
-  <div class="panel">
+  <div class="panel area-controls">
     <div class="row1">
       <div>
         <label class="fld" for="salary">Monthly take-home pay</label>
@@ -157,10 +161,7 @@
     </div>
   </div>
 
-  </div>
-
-  <div class="lscol lscol-b">
-  <div class="panel">
+  <div class="panel area-chart">
     <table class="buckets">
       <thead>
         <tr>
@@ -182,7 +183,7 @@
     </table>
   </div>
 
-  <div class="highlight">
+  <div class="highlight area-stats">
     <div class="stat">
       <div class="k">Building your future</div>
       <div class="v mono" id="futureAmt">—</div>
@@ -200,12 +201,12 @@
     </div>
   </div>
   </div>
-  </div>
 
   <p class="note">
     <b>How to read this:</b> percentages are a starting point, not a rule — drag a slider <em>or type a number straight into the Share column</em> and watch the amounts update. The classic <b>50/30/20</b> is 50% needs, 30% wants, 20% savings &amp; debt. The <b>detailed buckets</b> break that "20%" into the jobs that actually move your life forward. The <b>ideal %</b> beside each bucket is a common guideline — your life may call for something different, and that's fine.<br><br>
     All amounts are in Qatari Riyal (QAR). This is an educational planning aid, not financial advice.
   </p>
+  <div class="credit">Created by SWAN L&amp;D · 2026</div>
 </div>
 
 <script>
@@ -246,7 +247,8 @@
         +'<td class="r amt mono" data-amt="'+i+'"></td>';
       rows.appendChild(tr);
       var s=document.createElement("span");
-      s.style.background="var("+b.c+")"; s.dataset.i=i; s.title=b.t;
+      s.style.background="var("+b.c+")"; s.dataset.i=i;
+      var lbl=document.createElement("span"); lbl.className="seglabel"; s.appendChild(lbl);
       bar.appendChild(s);
     });
     rows.querySelectorAll('input[type=range]').forEach(function(r){
@@ -273,11 +275,23 @@
     var salary=num($("salary").value);
     var tot=data.reduce(function(s,b){return s+b.pct},0);
     var bar=$("bar");
+    var barW=bar.offsetWidth||0;
     data.forEach(function(b,i){
       var span=bar.querySelector('span[data-i="'+i+'"]');
-      if(span) span.style.flexBasis=(tot>0?(b.pct/tot*100):0)+"%";
+      var amt=salary*b.pct/100;
+      if(span){
+        span.style.flexBasis=(tot>0?(b.pct/tot*100):0)+"%";
+        span.title=b.t+" · "+b.pct+"% · QAR "+fmt(amt);
+        var w=barW*(tot>0?b.pct/tot:0);
+        var lbl=span.querySelector('.seglabel');
+        if(lbl){
+          var full=b.t+" "+b.pct+"%";
+          var needFull=full.length*6.7+16, needPct=(""+b.pct).length*7+22;
+          lbl.textContent = w>=needFull ? full : (w>=needPct ? b.pct+"%" : "");
+        }
+      }
       var amtEl=document.querySelector('#rows [data-amt="'+i+'"]');
-      if(amtEl) amtEl.textContent="QAR "+fmt(salary*b.pct/100);
+      if(amtEl) amtEl.textContent="QAR "+fmt(amt);
     });
     var tp=$("totPct"); tp.textContent=tot+"%";
     tp.className="total-pct "+(tot===100?"ok":"off");

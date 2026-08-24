@@ -78,27 +78,29 @@
 
   .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
   .note b{color:var(--muted);}
+  .credit{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:16px;}
   @media (max-width:600px){ header.top{padding:24px 20px;} .controls{grid-template-columns:1fr;} }
 
   /* ---- Landscape / present-on-screen layout ---- */
   @media (min-width:920px) and (min-aspect-ratio:13/10){
-    html,body{overflow:hidden;}
-    .wrap{max-width:none;height:100vh;display:flex;flex-direction:column;padding:0 22px 10px;gap:10px;}
-    header.top{margin:0;padding:13px 26px;flex:none;}
-    header.top h1{font-size:1.5rem;margin-bottom:2px;}
-    header.top p{font-size:.8rem;max-width:120ch;}
-    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(300px,34%) 1fr;gap:16px;align-items:start;}
-    .lscol{display:flex;flex-direction:column;gap:10px;min-width:0;}
-    .lscol .panel{margin:0;}
-    .panel{padding:15px 18px;}
-    .controls{margin-top:14px;padding-top:12px;}
-    .legend{margin-bottom:8px;}
-    .stats{gap:10px;}
-    .stat{min-width:110px;padding:10px 12px;}
-    .stat .v{font-size:1.1rem;}
-    .stat .sub{display:none;}
-    .callout{margin-top:0;padding:11px 16px;}
-    .callout p{display:none;}
+    .wrap{max-width:none;min-height:100vh;display:flex;flex-direction:column;padding:0 20px 12px;gap:9px;}
+    header.top{margin:0;padding:12px 26px;flex:none;}
+    header.top h1{font-size:1.42rem;margin-bottom:2px;}
+    header.top p{font-size:.77rem;max-width:135ch;}
+    .lsgrid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(320px,37%) 1fr;
+      grid-template-rows:min-content min-content min-content 1fr;
+      grid-template-areas:"controls chart" "stats chart" "callout chart" "spacer chart";
+      gap:10px 16px;}
+    .lsgrid .panel{margin:0;}
+    .area-controls{grid-area:controls;} .area-stats{grid-area:stats;} .area-callout{grid-area:callout;}
+    .area-chart{grid-area:chart;align-self:start;min-width:0;}
+    .panel{padding:13px 16px;}
+    .controls{margin-top:12px;padding-top:10px;}
+    .legend{margin-bottom:6px;}
+    .area-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .area-stats .stat{min-width:0;padding:9px 12px;}
+    .stat .v{font-size:1.05rem;}
+    .callout{margin-top:0;padding:10px 14px;}
     .note{display:none;}
   }
 </style>
@@ -111,8 +113,7 @@
   </header>
 
   <div class="lsgrid">
-  <div class="lscol lscol-a">
-  <div class="panel">
+  <div class="panel area-controls">
     <span class="fld">Pick a market story — what happens to the price over time</span>
     <div class="scenarios" role="group" aria-label="Price scenario">
       <button data-s="dip" aria-pressed="true">Dip &amp; recover</button>
@@ -134,10 +135,7 @@
     </div>
   </div>
 
-  </div>
-
-  <div class="lscol lscol-b">
-  <div class="panel chartpanel">
+  <div class="panel chartpanel area-chart">
     <div class="legend">
       <span class="it"><span class="ln" style="border-color:var(--price)"></span>Unit price</span>
       <span class="it"><span class="dot" style="width:13px;height:13px;background:var(--buy);opacity:.85"></span>Your monthly buy <span style="color:var(--faint)">(bigger = more units)</span></span>
@@ -159,17 +157,16 @@
     </div>
   </div>
 
-  <div class="stats">
+  <div class="stats area-stats">
     <div class="stat"><div class="k">You invested</div><div class="v mono" id="invested">—</div><div class="sub" id="investedSub">—</div></div>
     <div class="stat"><div class="k">Units you own</div><div class="v mono" id="units">—</div><div class="sub">More units, because dips were cheap.</div></div>
     <div class="stat"><div class="k">Worth today</div><div class="v mono" id="value">—</div><div class="sub" id="valueSub">Units × the final price.</div></div>
     <div class="stat" id="glTile"><div class="k">Gain / loss</div><div class="v mono" id="gl">—</div><div class="sub">Value minus what you put in.</div></div>
   </div>
 
-  <div class="callout">
+  <div class="callout area-callout">
     <div class="big">Your average cost: <b id="coCost">—</b> <span class="price">vs average price <span id="coPrice">—</span></span></div>
     <p id="coP">Because your fixed amount bought more units when the price was low, you paid less per unit than the market's average — without ever trying to time it.</p>
-  </div>
   </div>
   </div>
 
@@ -177,6 +174,7 @@
     <b>The takeaway:</b> steady monthly investing turns a bumpy market into an advantage — the dips become discounts, and you're never forced to guess the perfect moment. That's the same thing that happens when you invest into an ETF from your salary each month.<br><br>
     <b>But it's not magic:</b> dollar-cost averaging lowers your <em>average cost</em> and removes the guesswork — it does not guarantee a profit. If the price ends below what you paid (try "Long decline"), you can still be down. Prices here are simplified illustrations, not real market data or a forecast. Educational only, not financial advice.
   </p>
+  <div class="credit">Created by SWAN L&amp;D · 2026</div>
 </div>
 
 <script>

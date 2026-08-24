@@ -50,16 +50,18 @@
     <button class="tab" data-i="2" role="tab" aria-selected="false">🪙 Buying the Dips</button>
     <button class="tab" data-i="3" role="tab" aria-selected="false">🧭 Start Investing</button>
     <button class="tab" data-i="4" role="tab" aria-selected="false">🔒 Choosing a Tool</button>
+    <button class="tab" data-i="5" role="tab" aria-selected="false">🛠️ Setup Guide</button>
   </div>
   <iframe id="f0" class="frame" src="budget.html" title="Budgeting tool"></iframe>
   <iframe id="f1" class="frame" src="compound.html" title="The Cost of Waiting tool" style="display:none"></iframe>
   <iframe id="f2" class="frame" src="dca.html" title="Buying the Dips tool" style="display:none"></iframe>
   <iframe id="f3" class="frame" src="investing.html" title="Getting Started with Investing guide" style="display:none"></iframe>
   <iframe id="f4" class="frame" src="choosing.html" title="Choosing a Budgeting Tool guide" style="display:none"></iframe>
+  <iframe id="f5" class="frame" src="setup.html" title="Budget sheet and form setup guide" style="display:none"></iframe>
 
 <script>
 (function(){
-  var frames=[document.getElementById('f0'),document.getElementById('f1'),document.getElementById('f2'),document.getElementById('f3'),document.getElementById('f4')];
+  var frames=[document.getElementById('f0'),document.getElementById('f1'),document.getElementById('f2'),document.getElementById('f3'),document.getElementById('f4'),document.getElementById('f5')];
   var mqPresent=window.matchMedia('(min-width:920px) and (min-aspect-ratio:13/10)');
   function present(){return mqPresent.matches;}
   function fit(f){
