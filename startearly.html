@@ -71,6 +71,15 @@
   .note b{color:var(--muted);}
   .credit{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-top:16px;}
   .foot{margin-top:8px;}
+  .rateguide{margin-top:14px;border:1px solid var(--line);border-radius:9px;padding:14px 17px;background:var(--card);box-shadow:var(--shadow);}
+  .rg-title{font-weight:600;font-size:.9rem;margin-bottom:9px;color:var(--ink);}
+  .rg{display:grid;grid-template-columns:62px 1fr;gap:2px 12px;padding:7px 0;border-top:1px solid var(--line);font-size:.85rem;align-items:baseline;}
+  .ratelabel{display:inline-block;margin-top:14px;background:var(--brass-soft);border:1px solid var(--line-strong);border-radius:100px;padding:7px 15px;font-size:.9rem;color:var(--ink);}
+  .ratelabel b{color:var(--brass);font-family:"IBM Plex Mono",monospace;}
+  .rg:first-of-type{border-top:0;}
+  .rg .r{font-family:"IBM Plex Mono",monospace;color:var(--brass);font-weight:600;}
+  .rg .d{color:var(--muted);}
+  .rg .d b{color:var(--ink);}
 
   @media (max-width:560px){
     header.top{padding:26px 22px;}
@@ -125,6 +134,7 @@
       </div>
     </div>
     <div class="targetline" id="targetLine" style="display:none;">→ That means a target of about <b id="tlAmt">—</b> invested.</div>
+    <div class="ratelabel" id="rateLabel">—</div>
   </div>
 
   <p class="headline" id="headline">—</p>
@@ -132,9 +142,20 @@
   <div class="rows" id="rows"></div>
 
   <p class="note">
-    <b>How to read it:</b> each bar is the fixed amount you'd set aside <em>every month</em> to reach your target by your chosen age, if it grew at the rate shown. Start younger and the bar shrinks dramatically — that's compounding rewarding time in the market. <br><br>
-    <b>About the rate:</b> a diversified stock ETF has historically returned roughly <b>7% a year</b> over the long run (before inflation) — that's the default here. More cautious planning uses ~5%, and cash or fixed deposits far less. Change it to see how sensitive the numbers are.<br><br>
-    This is a simplified illustration assuming a steady return compounded monthly; real markets rise and fall and nothing here is guaranteed. Amounts in QAR. Educational only, not financial advice.
+    <b>How to read it:</b> each bar is the fixed amount you'd set aside <em>every month</em> to reach your target by your chosen age, if it grew at the rate shown. Start younger and the bar shrinks dramatically — that's compounding rewarding time in the market.
+  </p>
+  <div class="rateguide">
+    <div class="rg-title">Which yearly growth rate should I pick? Try a few — here's what each roughly means:</div>
+    <div class="rg"><span class="r">0%</span><span class="d">🛏️ <b>Cash under the pillow</b> — saved with no growth at all, and inflation still nibbles at it.</span></div>
+    <div class="rg"><span class="r">1–2%</span><span class="d">🐌 Cash or a savings account — barely grows, usually loses to inflation.</span></div>
+    <div class="rg"><span class="r">3–4%</span><span class="d">🏦 A fixed deposit or sukuk — steady and low-risk.</span></div>
+    <div class="rg"><span class="r">5–6%</span><span class="d">🧭 A more cautious choice — closer to what stocks return <em>after</em> inflation (today's money).</span></div>
+    <div class="rg"><span class="r">~7%</span><span class="d">⭐ <b>The default.</b> A diversified stock ETF over the long run, before inflation — higher, but it rises and falls along the way.</span></div>
+    <div class="rg"><span class="r">8–10%</span><span class="d">🤞 Optimistic — the US market's long-run historical average. Lovely if it happens; don't plan on it.</span></div>
+    <div class="rg"><span class="r">10%+</span><span class="d">🦄 <b>Wishful thinking</b> — chasing a unicorn on a budget. If you can truly get this, don't keep the golden goose to yourself! (a.k.a. manifesting a bull market)</span></div>
+  </div>
+  <p class="note" style="margin-top:16px;padding-top:0;border-top:0;">
+    Whichever you choose, this is a simplified illustration assuming a steady return compounded monthly; real markets rise and fall and nothing here is guaranteed. Amounts in QAR. Educational only, not financial advice.
   </p>
   <div class="credit foot">Created by SWAN L&amp;D · 2026</div>
 </div>
@@ -154,10 +175,21 @@
     return fv*i/(Math.pow(1+i,months)-1);
   }
   function effTarget(){ return S.mode==="amount" ? S.target : (S.wr>0 ? S.income*12/(S.wr/100) : 0); }
+  function rateInfo(r){
+    if(r<1) return {e:"🛏️", t:"cash under the pillow — no growth at all"};
+    if(r<3) return {e:"🐌", t:"basic savings — barely grows, loses to inflation"};
+    if(r<5) return {e:"🏦", t:"fixed deposit or sukuk — steady, low-risk"};
+    if(r<7) return {e:"🧭", t:"a cautious choice — roughly after-inflation returns"};
+    if(r<8) return {e:"⭐", t:"the default — a diversified stock ETF, before inflation"};
+    if(r<=10) return {e:"🤞", t:"optimistic — the US market's historical average"};
+    return {e:"🦄", t:"wishful thinking — chasing a unicorn on a budget"};
+  }
 
   function render(){
     var TG=effTarget();
     if(S.mode==="income") $("tlAmt").textContent="QAR "+fmt(TG);
+    var ri=rateInfo(S.rate);
+    $("rateLabel").innerHTML='<b>'+S.rate+'%</b> &nbsp;'+ri.e+' &nbsp;'+ri.t;
     var rows=$("rows"); rows.innerHTML="";
     var ages=START_AGES.filter(function(a){return a < S.goal;});
     var data=ages.map(function(a,idx){
