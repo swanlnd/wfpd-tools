@@ -75,6 +75,9 @@
   .callout .big b{color:var(--avgcost);}
   .callout .big .price{color:var(--faint);}
   .callout p{margin:5px 0 0;font-size:.84rem;color:var(--muted);}
+  .callout .defs{margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:.82rem;line-height:1.55;}
+  .callout .defs b{color:var(--ink);}
+  .callout .defs em{color:var(--avgcost);font-style:normal;font-weight:600;}
 
   .note{font-size:.8rem;color:var(--faint);line-height:1.55;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);}
   .note b{color:var(--muted);}
@@ -167,6 +170,7 @@
   <div class="callout area-callout">
     <div class="big">Your average cost: <b id="coCost">—</b> <span class="price">vs average price <span id="coPrice">—</span></span></div>
     <p id="coP">Because your fixed amount bought more units when the price was low, you paid less per unit than the market's average — without ever trying to time it.</p>
+    <p class="defs"><b>Average cost</b> is what you actually paid per unit — your break-even. If today's price is above it, you're ahead; below it, you're down on paper (and buying more is cheaper). <b>Average price</b> is just the market's plain average over the same months. Steady buying scoops up extra units on the dips, so your average cost lands <em>below</em> the average price — and that gap is the edge you got without timing anything.</p>
   </div>
   </div>
 
